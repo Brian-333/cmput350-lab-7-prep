@@ -1,7 +1,19 @@
 Hash table:
+Memory: only stores existing (entity, component) pairs, but high overhead (buckets/nodes).
+Speed: average O(1) poor cache locality. worst case can be bad.
+Maintenance: easy add/remove (avg O(1)) unused entities need no entry. removing still needs care to keep component indices dense.
 
 Map:
+Memory: only existing pairs. tree-node pointer overhead.
+Speed: O(log n) worse cache locality than arrays/hash tables.
+Maintenance: insert/erase O(log n) sparse occupancy is natural. same dense-index bookkeeping on removal.
 
 Sparse mapping 1:
+Memory: O(N*K) always (m[entity][component]), wasteful if few components are used.
+Speed: O(1) good when reading many components of one entity. worse for one component across many entities.
+Maintenance: add entity = append a K-array. set/clear component = O(1) write. removing entities could be bad.
 
 Sparse mapping 2:
+Memory: O(N*K) (m[component][entity]) as well.
+Speed: O(1) best for iterating one component over all entities. worse for all components of one entity.
+Maintenance: add entity = grow all K vectors set/clear component = O(1) same entity-removal issues as mapping 1. This is less intuitive since len of the array cannot be modified.
